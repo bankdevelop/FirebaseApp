@@ -16,11 +16,17 @@ app.use(errorHandler.routeError);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
+app.use('/component', express.static('component'));
+
 app.get('/', (req, res, next) => {
-    res.render('index');
+    var host = req.get('host');
+    res.render('home', {'host':host});
 });
 
-app.use('/api', apiClient);//need to protect with cors
+// need to protect api with cors
+// because if we not protect with cors, other webside
+// can use this api too.
+app.use('/api', apiClient);
 
 app.listen(5000, ()=>{
     console.log(`Server running on port ${5000}`)
