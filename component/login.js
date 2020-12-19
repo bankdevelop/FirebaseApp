@@ -1,5 +1,7 @@
-class Login2 extends React.Component{
+class Login extends React.Component{
     render(){
-        return React.createElement('h2', null, 'Login2');
-    }    
+        return React.createElement('div', null, 
+                    React.createElement('h1', null, 'Test2')
+        );
+    }
 }
