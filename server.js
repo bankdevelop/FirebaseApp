@@ -18,7 +18,7 @@ app.set('view engine', 'pug');
 app.use('/component', express.static('component'));
 
 app.get('/', (req, res, next) => {
-    var host = req.protocol+'://'+req.get('host');
+    var host = `${req.protocol}://${req.get('host')}`;
     res.render('home', {'host':host});
 });
 

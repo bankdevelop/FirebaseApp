@@ -1,0 +1,28 @@
+* {
+    margin: 0px;
+}
+
+.login-table{
+    padding: 20px;
+}
+
+.login-form{
+    width: 50%;
+    padding: 10px;
+    margin: 0 auto;
+    display: block;
+    background-color: #F8F8F8;
+    border: grey solid 1px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.login-form-title{
+    font-size: large;
+    text-align: center;
+}
+
+.login-field-area{
+    font-size: 20px;
+    padding: 15px;
+}
