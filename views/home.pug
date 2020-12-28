@@ -24,7 +24,12 @@ html
             }
 
             ReactDOM.render(React.createElement(Greetings, { name : 'Chris' }),document.getElementById('root'));
+
+            var b = fetch('http://localhost:5000/api/init').then(res => {
+                    console.log(res);
+                    return res.json();
+                }).then( (data) => {console.log(data);} );
+            
         }
     body
         div#root
-        h1 test

@@ -3,14 +3,14 @@ const bodyParser = require('body-parser'),
       dotenv = require('dotenv'),
       cors = require('cors'),
       apiClient = require('./route/api'),
-      errorHandler = require('./middleware/error');
+      errorHandler = require('./service/error');
 
 dotenv.config('.env');
 var app = express();
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-app.use(cors());
+//app.use(cors());
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
