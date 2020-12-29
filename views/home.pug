@@ -11,6 +11,18 @@ html
     script(crossorigin src='https://unpkg.com/react-dom@17/umd/react-dom.development.js')
     script(src=host+'/component/login.js')
     script.
+        var b = fetch('http://localhost:5000/api/init', {
+            headers : { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(res => {
+            console.log(res);
+            return res.json();
+        }).then( (data) => {
+            console.log(data);
+        });
+
         window.onload = function(){
             
             class Greetings extends React.Component{
@@ -24,11 +36,6 @@ html
             }
 
             ReactDOM.render(React.createElement(Greetings, { name : 'Chris' }),document.getElementById('root'));
-
-            var b = fetch('http://localhost:5000/api/init').then(res => {
-                    console.log(res);
-                    return res.json();
-                }).then( (data) => {console.log(data);} );
             
         }
     body

@@ -1,5 +1,6 @@
 const firebase = require('firebase'),
-      dotenv = require('dotenv');
+      dotenv = require('dotenv'),
+      admin = require('firebase-admin');
 
 require('firebase/auth');
 require('firebase/database');
@@ -30,20 +31,37 @@ auth.createNewUser = function(userId, name, email, imageUrl) {
     });
 }
 
-auth.login = function(username, password){
-    firebase.auth().signInWithEmailAndPassword(username, password)
+auth.login = function(req, res, next){
+    var token = null;
+
+    firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.pass)
     .then((user) => {
-        console.log(user);
+        firebase
+            .auth()
+            .currentUser
+            .getIdToken(true)
+            .then(function(idToken) {
+                res.json(idToken);
+            });
     })
     .catch((error) => {
-        console.log(error);
         var errorCode = error.code;
         var errorMessage = error.message;
+        res.status(errorCode).send(errorMessage);
     });
 };
 
 auth.isLogin = function(idToken){
-  console.log(firebase.auth().currentUser.getIdToken(true));
+    admin
+    .auth()
+    .verifyIdToken(idToken)
+    .then((decodedToken) => {
+      const uid = decodedToken.uid;
+      console.log(uid);
+    })
+    .catch((error) => {
+      // Handle error
+    });
 };
 
 auth.getInit = function(){
@@ -52,5 +70,5 @@ auth.getInit = function(){
 };
 
 auth.getConfig = function(){
-    return () => firebaseConfig;
+    return firebaseConfig;
 };

@@ -1,3 +1,5 @@
+var domain = 'http://localhost:5000';
+
 class Login extends React.Component{
     render(){
         return React.createElement('div', {className:'login-table'},
@@ -30,44 +32,70 @@ class FieldLoginArea extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChangeInput(stateName, elementID){
-        var value = document.getElementById(elementID).value;
+    handleChangeInput(e){
+        var value = e.target.value;
         this.setState({
-            [stateName]: value
+            [e.target.name]: value
         });
+        console.log(e.target.name, this.state[e.target.name]);
     }
 
-    handleSubmit(){
-        //fetch()
+    async userLogin(url = '', data = {}) {
+        const response = await fetch(url, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    }
+
+    handleSubmit(e){
+        e.preventDefault();
+        let email = this.state.email;
+        let pass = this.state.password;
+        
+        if (email.length > 5 && pass.length > 2) {
+            console.log('fetch login!')
+            this.userLogin(
+                        domain+'/api/login', 
+                        {email:email, pass:pass}
+                    )
+                    .then(data => {
+                        //console.log(data);
+                        if (data)
+                            localStorage.setItem('freshToken', data);
+                        else
+                            console.log('Not Found User');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+        }
     }
 
     render(){
         return React.createElement('div', {className:'login-field-area'},
                     React.createElement('div', null, 'Email : ',
                         React.createElement('input', {
-                            id: 'emailField',
+                            name: 'email',
                             type: 'text',
-                            onChange: () => this.handleChangeInput(
-                                'email',
-                                'emailField'
-                            )
+                            onChange: this.handleChangeInput
                         })
                     ),
                     React.createElement('div', null, 'Password : ',
                         React.createElement('input', {
-                            id: 'passField',
+                            name: 'password',
                             type: 'password',
-                            onChange: () => this.handleChangeInput(
-                                'password',
-                                'passField'
-                            )
+                            onChange: this.handleChangeInput
                         })
                     ),
                     React.createElement('div', null,
                         React.createElement('input',{
                             type:'submit',
                             value:'Login',
-                            onSubmit: () => this.handleSubmit()
+                            onClick: this.handleSubmit
                         }),
                         React.createElement('input', {type:'reset'})
                     )
