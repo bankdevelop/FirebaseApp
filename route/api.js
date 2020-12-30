@@ -8,9 +8,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/login', auth.login);
 
-router.get('/check', (req, res, next) => {
-   res.json(auth.isLogin(testToken));
-});
+router.post('/check', auth.isLogin);
 
 router.get('/init', (req, res, next) => {
    res.json('ok'); //this ok

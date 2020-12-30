@@ -21,7 +21,8 @@ var firebaseConfig = {
     appId: env.FB_APP_ID,
     measurementId: env.FB_MEASUREMENT_ID
 };
-var fb = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
+admin.initializeApp(firebaseConfig);
 
 auth.createNewUser = function(userId, name, email, imageUrl) {
     firebase.database().ref('users/' + userId).set({
@@ -51,16 +52,19 @@ auth.login = function(req, res, next){
     });
 };
 
-auth.isLogin = function(idToken){
+auth.isLogin = function(req, res, next){
     admin
     .auth()
-    .verifyIdToken(idToken)
+    .verifyIdToken(req.body.token)
     .then((decodedToken) => {
-      const uid = decodedToken.uid;
-      console.log(uid);
+        const uid = decodedToken.uid;
+        console.log(decodedToken);
+        res.json(uid);
     })
     .catch((error) => {
-      // Handle error
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        res.status(errorCode).send(errorMessage);
     });
 };
 

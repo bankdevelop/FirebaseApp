@@ -30,6 +30,7 @@ class FieldLoginArea extends React.Component{
 
         this.handleChangeInput = this.handleChangeInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.checkUser = this.checkUser.bind(this);
     }
 
     handleChangeInput(e){
@@ -40,7 +41,7 @@ class FieldLoginArea extends React.Component{
         console.log(e.target.name, this.state[e.target.name]);
     }
 
-    async userLogin(url = '', data = {}) {
+    async fetchData(url = '', data = {}) {
         const response = await fetch(url, {
             method: 'POST', 
             headers: {
@@ -51,7 +52,7 @@ class FieldLoginArea extends React.Component{
         });
         return response.json();
     }
-
+    
     handleSubmit(e){
         e.preventDefault();
         let email = this.state.email;
@@ -59,7 +60,7 @@ class FieldLoginArea extends React.Component{
         
         if (email.length > 5 && pass.length > 2) {
             console.log('fetch login!')
-            this.userLogin(
+            this.fetchData(
                         domain+'/api/login', 
                         {email:email, pass:pass}
                     )
@@ -72,6 +73,23 @@ class FieldLoginArea extends React.Component{
                     }).catch((error) => {
                         console.log(error);
                     });
+        }
+    }
+
+    checkUser(){
+        console.log('check login!')
+        if (localStorage['freshToken']) {
+            this.fetchData(
+                        domain+'/api/check', 
+                        {token:localStorage['freshToken']}
+                    )
+                    .then(data => {
+                        console.log(data);
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+        }else{
+            console.log('nothaveToken');
         }
     }
 
@@ -98,6 +116,13 @@ class FieldLoginArea extends React.Component{
                             onClick: this.handleSubmit
                         }),
                         React.createElement('input', {type:'reset'})
+                    ),
+                    React.createElement('div', null,
+                        React.createElement('input',{
+                            type:'submit',
+                            value:'checkIsLogin?',
+                            onClick: this.checkUser
+                        })
                     )
                 );
     }
