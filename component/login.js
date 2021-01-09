@@ -23,7 +23,8 @@ class Login extends React.Component{
 class LoginFrom extends React.Component{
     render(){
         return React.createElement('div', {className:'login-form'}, 
-                    React.createElement('div', {className:'login-form-title'},
+                    React.createElement('div', 
+                        {className:'login-form-title'},
                         React.createElement('h1', null, 'Login System')
                     ),
                     React.createElement('hr'),
@@ -68,7 +69,9 @@ class FieldLoginArea extends React.Component{
                         if (data.status == 200)
                             localStorage.setItem('freshToken', data);
                         else
-                            this.setState({errorCode: 'Email or Password Wrong!'})
+                            this.setState(
+                                {errorCode: 'Email or Password Wrong!'}
+                            );
                     }).catch((error) => {
                         console.log(error);
                     });
@@ -93,7 +96,8 @@ class FieldLoginArea extends React.Component{
     }
 
     render(){
-        return React.createElement('div', {className:'login-field-area'},
+        return React.createElement('div', 
+                    {className:'login-field-area'},
                     React.createElement('div', null, 'Email : ',
                         React.createElement('input', {
                             name: 'email',
@@ -108,22 +112,21 @@ class FieldLoginArea extends React.Component{
                             onChange: this.handleChangeInput
                         })
                     ),
-                    React.createElement('div', null,
+                    React.createElement('div', 
+                        {style: {width: '100%', text: 'center'}},
                         React.createElement('input',{
                             type:'submit',
                             value:'Login',
                             onClick: this.handleSubmit
                         }),
-                        React.createElement('input', {type:'reset'})
-                    ),
-                    React.createElement('div', null,
                         React.createElement('input',{
                             type:'submit',
                             value:'checkIsLogin?',
                             onClick: this.checkUser
                         })
                     ),
-                    React.createElement('span', {style: {fontSize: '15px', color:'red'}},
+                    React.createElement('span', 
+                        {style: {fontSize: '15px', color:'red'}},
                         this.state.errorCode
                     )
                 );
