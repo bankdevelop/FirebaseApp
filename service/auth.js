@@ -45,12 +45,12 @@ auth.isLogin = function(req, res, next){
     .verifyIdToken(req.body.token)
     .then((decodedToken) => {
         const uid = decodedToken.uid;
-        res.json(uid);
+        res.json('Now, you are login');
     })
     .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
-        res.status(errorCode).send(errorMessage);
+        res.status(401).json('You are not login');
     });
 
 };

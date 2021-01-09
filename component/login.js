@@ -1,5 +1,17 @@
 var domain = 'http://localhost:5000';
 
+async function fetchData(url = '', data = {}) {
+    const response = await fetch(url, {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    return {status: response.status, data: response.json()};
+}
+
 class Login extends React.Component{
     render(){
         return React.createElement('div', {className:'login-table'},
@@ -25,7 +37,8 @@ class FieldLoginArea extends React.Component{
         super(props);
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            errorCode: ''
         };
 
         this.handleChangeInput = this.handleChangeInput.bind(this);
@@ -38,19 +51,6 @@ class FieldLoginArea extends React.Component{
         this.setState({
             [e.target.name]: value
         });
-        console.log(e.target.name, this.state[e.target.name]);
-    }
-
-    async fetchData(url = '', data = {}) {
-        const response = await fetch(url, {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        return response.json();
     }
     
     handleSubmit(e){
@@ -60,16 +60,15 @@ class FieldLoginArea extends React.Component{
         
         if (email.length > 5 && pass.length > 2) {
             console.log('fetch login!')
-            this.fetchData(
+            fetchData(
                         domain+'/api/login', 
                         {email:email, pass:pass}
                     )
                     .then(data => {
-                        //console.log(data);
-                        if (data)
+                        if (data.status == 200)
                             localStorage.setItem('freshToken', data);
                         else
-                            console.log('Not Found User');
+                            this.setState({errorCode: 'Email or Password Wrong!'})
                     }).catch((error) => {
                         console.log(error);
                     });
@@ -79,7 +78,7 @@ class FieldLoginArea extends React.Component{
     checkUser(){
         console.log('check login!')
         if (localStorage['freshToken']) {
-            this.fetchData(
+            fetchData(
                         domain+'/api/check', 
                         {token:localStorage['freshToken']}
                     )
@@ -123,6 +122,9 @@ class FieldLoginArea extends React.Component{
                             value:'checkIsLogin?',
                             onClick: this.checkUser
                         })
+                    ),
+                    React.createElement('span', {style: {fontSize: '15px', color:'red'}},
+                        this.state.errorCode
                     )
                 );
     }
