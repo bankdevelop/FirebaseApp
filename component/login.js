@@ -113,7 +113,10 @@ class FieldLoginArea extends React.Component{
                         })
                     ),
                     React.createElement('div', 
-                        {style: {width: '100%', text: 'center'}},
+                        {style: {
+                            textAlign: 'center',
+                            margin: '1vw'
+                        }},
                         React.createElement('input',{
                             type:'submit',
                             value:'Login',
