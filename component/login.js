@@ -1,4 +1,4 @@
-var domain = 'http://localhost:5000';
+var domain = window.location.href;
 
 async function fetchData(url = '', data = {}) {
     const response = await fetch(url, {
