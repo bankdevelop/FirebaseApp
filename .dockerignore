@@ -1,0 +1,9 @@
+.env
+package-lock.json
+
+/material
+/node_modules
+
+firebase.json
+.firebaserc
+fb
